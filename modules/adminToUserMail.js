@@ -5,8 +5,8 @@ module.exports =
             <hr style="width: 83%;height: 1px; margin-top: 5%;background-color: #e9e9e9; border: 0; border-top: 1px solid #e9e9e9;">\
             <div style="margin-top: -13px;margin-bottom: 42px; font-size: 14px;">\
             <p>Hi, {{ name }}</p>\
-            <p>Your Password has been changed successfully.</p>\
-            <p>Your New Password is {{ reset_password }}</p>\
+            <p>Here is some feedback from Admin</p>\
+            <p>{{ adminresponse }}</p>\
             </div>\
             <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-image: url({{ site_url }}uploads/email_template/footer_bg.png); height: 100px; text-align: center;">\
                 <tbody>\

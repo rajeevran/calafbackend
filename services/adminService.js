@@ -113,7 +113,7 @@ var adminService = {
         if ( (adminData.email || adminData.phoneNumber) && adminData.password) {
 
             AdminSchema.findOne(query)
-                .select('password name email permission profileImage authtoken')
+                .select('password firstName lastName email permission profileImage authtoken')
                 .lean(true)
                 .then(function (loginRes) {
                     console.log("loginRes",loginRes);
@@ -159,9 +159,9 @@ var adminService = {
                                     let profile_image = loginRes.profileImage;
 
                                     if (!profile_image || profile_image == '') {
-                                        profile_image = config.liveUrl + config.userDemoPicPath;
+                                        profile_image = config.userDemoPicPath;
                                     } else {
-                                        profile_image = config.liveUrl + loginRes.profileImage;
+                                        profile_image = loginRes.profileImage;
                                     }
 
                                     callback({
@@ -174,7 +174,7 @@ var adminService = {
                                             deviceId:deviceId?deviceId:null,
                                             "id": loginRes._id,
                                             "permission": loginRes.permission,
-                                            "name": loginRes.name,
+                                            "name": loginRes.firstName + " " +loginRes.lastName,
                                             "profileImage": profile_image,
                                             "status": loginRes.status
                                         }
@@ -293,13 +293,6 @@ var adminService = {
                 message: "Please Provide Full Name",
                 response: []
             });
-        } else if (!adminData.userName || typeof adminData.userName === undefined) {
-            callback(null, {
-                success: false,
-                STATUSCODE: 4004,
-                message: "Please Provide User Name",
-                response: []
-            });
         } else if (!adminData.email || typeof adminData.email === undefined) {
             callback(null, {
                 success: false,
@@ -328,7 +321,23 @@ var adminService = {
 
             }
     },
+    //Edit User
+    editUser: async (data, fileData, callback) => {
 
+        if (!data.userId || typeof data.userId === undefined) {
+                callback({
+                    success: false,
+                    STATUSCODE: 404,
+                    message: "Please Provide User Id",
+                    response: []
+                });
+        } else {
+
+            AdminModels.editUser(data, fileData, function (result) {
+                callback(result)
+                });
+        }
+    },
     //User Change password
     changePassword: async (data,  callback) => {
         if (!data.token || typeof data.token === undefined) {
@@ -408,215 +417,28 @@ var adminService = {
         });
     }
     },
-
-    //list Courses
-    listCourses: async (data,  callback) => {
-
-        AdminModels.listCourses(data,  function (result) {
-                callback(result)
-                });
+    listUser: function (data, callback) {
+        console.log("data",data); 
+        AdminModels.listUser(data, function (result) {
+            callback(result);
+        });
     },
-
-    //Add Courses
-    addCourses: async (courseData, fileData, callback) => {
-
-        if (!courseData.courseName || typeof courseData.courseName === undefined) {
+    // Send Email
+    sendEmail: (data, callback) => {
+        if (!data.email || typeof data.email === undefined) {
             callback({
                 success: false,
-                STATUSCODE: 4004,
-                message: "Please Provide Course Name",
-                response: [{docs:[]}]
+                STATUSCODE: 5002,
+                message: "email  Required ",
+                response: {}
             });
-        } else if (!fileData.courseImage || typeof fileData.courseImage === undefined) {
-            callback(null, {
-                success: false,
-                STATUSCODE: 4004,
-                message: "Please Provide Course Image",
-                response: [{docs:[]}]
+        }else {
+            data.email = String(data.email).toLowerCase();
+            AdminModels.sendEmail(data, function (result) {
+                callback(result);
             });
-        } else {
-                        
-            courseData._id = new ObjectID;
-
-            AdminModels.addCourses(courseData, fileData, function (result) {
-            callback(result)
-            });
-
         }
     },
-
-    //Edit Courses
-    editCourses: async (data, fileData, callback) => {
-
-        if (!data.courseId || typeof data.courseId === undefined) {
-                callback({
-                    success: false,
-                    STATUSCODE: 4004,
-                    message: "Please Provide Course Id",
-                    response: []
-                });
-        } else {
-                AdminModels.editCourses(data, fileData, function (result) {
-                callback(result)
-                });
-        }
-    },   
-    
-    //list Courses-Category
-    listCategory: async (data,  callback) => {
-
-        AdminModels.listCategory(data,  function (result) {
-                callback(result)
-                });
-    },
-    
-    //Add Category
-    addCategory: async (categoryData, callback) => {
-
-        if (!categoryData.categoryName || typeof categoryData.categoryName === undefined) {
-            callback({
-                success: false,
-                STATUSCODE: 4004,
-                message: "Please Provide Category Name",
-                response: [{docs:[]}]
-            });
-        } else {
-                        
-            categoryData._id = new ObjectID;
-
-            AdminModels.addCategory(categoryData, function (result) {
-            callback(result)
-            });
-
-        }
-    },
-
-    //Edit Category
-    editCategory: async (data,  callback) => {
-
-        if (!data.categoryId || typeof data.categoryId === undefined) {
-                callback({
-                    success: false,
-                    STATUSCODE: 4004,
-                    message: "Please Provide Category Id",
-                    response: []
-                });
-        } else {
-                AdminModels.editCategory(data,  function (result) {
-                callback(result)
-                });
-        }
-    },   
-
-
-
-    //list Courses-Sub-Category
-    listSubCategory: async (data,  callback) => {
-
-        AdminModels.listSubCategory(data,  function (result) {
-                callback(result)
-                });
-    },    
-
-    
-    //Add SubCategory
-    addSubCategory: async (subcategoryData, callback) => {
-
-        if (!subcategoryData.subcategoryName || typeof subcategoryData.subcategoryName === undefined) {
-            callback({
-                success: false,
-                STATUSCODE: 4004,
-                message: "Please Provide SubCategory Name",
-                response: [{docs:[]}]
-            });
-        } else {
-                        
-            subcategoryData._id = new ObjectID;
-
-            AdminModels.addSubCategory(subcategoryData, function (result) {
-            callback(result)
-            });
-
-        }
-    },
-
-    //Edit SubCategory
-    editSubCategory: async (data,  callback) => {
-
-        if (!data.subcategoryId || typeof data.subcategoryId === undefined) {
-                callback({
-                    success: false,
-                    STATUSCODE: 4004,
-                    message: "Please Provide SubCategory Id",
-                    response: []
-                });
-        } else {
-                AdminModels.editSubCategory(data,  function (result) {
-                callback(result)
-                });
-        }
-    },  
-    
-    //list Course Detail
-    listCourseDetail: async (data,  callback) => {
-
-        AdminModels.listCourseDetail(data,  function (result) {
-                callback(result)
-                });
-    },   
-    
-    //Add DetailCourse
-    addDetailCourse: async (data, fileData, callback) => {
-
-        if (!data.courseName || typeof data.courseName === undefined) {
-            callback({
-                success: false,
-                STATUSCODE: 4004,
-                message: "Please Provide Detail Course Name",
-                response: [{docs:[]}]
-            });
-        }else if (!data.overview || typeof data.overview === undefined) {
-            callback({
-                success: false,
-                STATUSCODE: 4004,
-                message: "Please Provide overview",
-                response: [{docs:[]}]
-            });
-        }else if (!data.learningElement || typeof data.learningElement === undefined) {
-            callback({
-                success: false,
-                STATUSCODE: 4004,
-                message: "Please Provide learning Element",
-                response: [{docs:[]}]
-            });
-        }   else {
-                        
-            data._id = new ObjectID;
-
-            AdminModels.addDetailCourse(data, fileData, function (result) {
-            callback(result)
-            });
-
-        }
-    },
-
-    //Edit DetailCourse
-    editDetailCourse: async (data,fileData,  callback) => {
-
-        if (!data.detailCourseId || typeof data.detailCourseId === undefined) {
-                callback({
-                    success: false,
-                    STATUSCODE: 4004,
-                    message: "Please Provide detailCourse Id",
-                    response: []
-                });
-        } else {
-                AdminModels.editDetailCourse(data,fileData,  function (result) {
-                callback(result)
-                });
-        }
-    },  
-
 }
 
 module.exports = adminService;

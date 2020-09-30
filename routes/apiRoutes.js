@@ -25,8 +25,8 @@ var secretKey = config.secretKey;
         });
     });
     //Otp Verification
-    api.post('/otpVerification', function (req, res) {
-        apiService.otpVerification(req.body, function (result) {
+    api.post('/verifyEmailOtp', function (req, res) {
+        apiService.verifyEmailOtp(req.body, function (result) {
             res.send(result)
         });
     });
@@ -44,8 +44,11 @@ var secretKey = config.secretKey;
     });
 
     //Reset Password
-    api.post("/resetPassword/:id", function (req, res) {
-        apiService.resetPassword(req.body, function (response) {
+    api.post("/resetPassword/:token", function (req, res) {
+        
+        let resetdata= { ...req.body, resetPasswordToken: req.params.token }
+
+        apiService.resetPassword(resetdata, function (response) {
             res.send(response);
         });
     });
@@ -77,6 +80,45 @@ var secretKey = config.secretKey;
             res.send(response);
         });
     });
+
+    //list User
+    api.get('/listUser', function (req, res) {
+        apiService.listUser(req.query, function (response) {
+            res.send(response);
+        });
+    });
+
+
+    //list Country
+    api.get('/listCountry', function (req, res) {
+        apiService.listCountry(req.query, function (response) {
+            res.send(response);
+        });
+    });
+    
+
+    //list Ethnicity
+    api.get('/listEthnicity', function (req, res) {
+        apiService.listEthnicity(req.query, function (response) {
+            res.send(response);
+        });
+    });
+
+    //testNotification
+    api.post('/testNotification', function (req, res) {
+        apiService.testNotification(req.body, function (response) {
+            res.send(response);
+        });
+    });
+
+    //social Login
+    api.post('/socialLogin', (req, res) => {
+
+        apiService.socialRegister(req.body, function (response) {
+             res.send(response);
+        });
+    });
+
     /******************************
      *  Middleware to check token
      ******************************/
@@ -92,7 +134,7 @@ var secretKey = config.secretKey;
                 if (err) {
                     res.send({
                         success: false,
-                        STATUSCODE: 4000,
+                        STATUSCODE: 400,
                         message: "Session timeout! Please login again.",
                         response: err
                     });
@@ -113,15 +155,18 @@ var secretKey = config.secretKey;
     /******************************
      *  Middleware to check token
      ******************************/
+
+
     //list User
-    api.get('/listUser', function (req, res) {
-        apiService.listUser(req.query, function (response) {
+    api.get('/reportedUserList', function (req, res) {
+        apiService.reportedUserList(req.query, function (response) {
             res.send(response);
         });
     });
 
     //edit User
     api.post('/editUser', function (req, res) {
+        console.log('req.files--->',req.files)
         apiService.editUser(req.body, req.files, function (response) {
             res.send(response);
         });
@@ -134,6 +179,7 @@ var secretKey = config.secretKey;
             res.send(result)
         })
     });
+
     // Edit Profile
     api.post('/editProfile', function (req, res) {
         req.body.userId = req.decoded.id;
@@ -156,79 +202,21 @@ var secretKey = config.secretKey;
             res.send(result);
         });
     });
-    //list Courses
-    api.get('/listCourses', function (req, res) {
-        apiService.listCourses(req.query, function (response) {
-            res.send(response);
+
+    // Update Multiple Profile Image 
+    api.post('/updateProfileImage', function (req, res) {
+        apiService.updateProfileImage(req.body, req.files, function (result) {
+            res.send(result);
         });
     });
+    
+    // Add Feedback
+    api.post('/addFeedback', function (req, res) {
 
-    //detail Courses
-    api.get('/detailCourses', function (req, res) {
-        apiService.detailCourses(req.query, function (response) {
-            res.send(response);
+        apiService.addFeedback(req.body,  function (result) {
+            res.send(result);
         });
     });
-
-    //delete Courses
-    api.post('/deleteDetailCourse', function (req, res) {
-        apiService.deleteDetailCourse(req.body, function (response) {
-            res.send(response);
-        });
-    });
-
-
-    //delete Courses
-    api.post('/deleteCourse', function (req, res) {
-        apiService.deleteCourses(req.body, function (response) {
-            res.send(response);
-        });
-    });
-
-    //list Courses-Category
-    api.get('/listCategory', function (req, res) {
-        apiService.listCategory(req.query, function (response) {
-            res.send(response);
-        });
-    });
-    //list Courses-Sub-Category
-    api.get('/listSubCategory', function (req, res) {
-        apiService.listSubCategory(req.query, function (response) {
-            res.send(response);
-        });
-    });
-
-    //Add To Cart
-    api.post('/addToCart', function (req, res) {
-        apiService.addToCart(req.body, function (response) {
-            res.send(response);
-        });
-    });
-
-    //Buy CourseDetail
-    api.post('/buyCourseDetail', function (req, res) {
-        apiService.buyCourseDetail(req.body, function (response) {
-            res.send(response);
-        });
-    });
-
-    //Add Review
-    api.post('/addReview', function (req, res) {
-
-        apiService.addReviewService(req.body, function (response) {
-            res.send(response);
-        });
-
-    });
-
-    //list Review
-    api.get('/listReview', function (req, res) {
-       
-        apiService.listReviewService(req.query, function (response) {
-                res.send(response);
-        });
-    });
-
 
     module.exports = api;
 

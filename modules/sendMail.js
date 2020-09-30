@@ -36,6 +36,10 @@ module.exports = function(mailType) {
         "sendFeedBack" :{
             subject : "Feedback",
             html    : require('./sendFeedBack'),
+        },
+        "adminToUserMail" :{
+            subject : "Feedback From Calaf Admin",
+            html    : require('./adminToUserMail'),
         }
     }
 // create reusable transporter object using the default SMTP transport to send mail from this account

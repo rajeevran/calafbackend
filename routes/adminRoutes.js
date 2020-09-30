@@ -32,6 +32,14 @@ admin.post('/adminForgotPassword', function (req, res) {
     });
 });
 
+
+admin.post('/sendEmail', function (req, res) {
+    var adminData = req.body;
+    adminService.sendEmail(adminData, function (response) {
+        res.send(response);
+    });
+});
+
 /******************************
  *  Middleware to check token
  ******************************/
@@ -90,9 +98,23 @@ admin.post('/deleteAdmin', function (req, res) {
     });
 });
 
+//list User
+admin.get('/listUser', function (req, res) {
+    adminService.listUser(req.query, function (response) {
+        res.send(response);
+    });
+});
 
 admin.post('/addUser', function (req, res) {
     adminService.addUser( req.body, req.files, function (response) {
+        res.send(response);
+    });
+});
+
+//edit User
+admin.post('/editUser', function (req, res) {
+    console.log('req.files--->',req.files)
+    adminService.editUser(req.body, req.files, function (response) {
         res.send(response);
     });
 });
@@ -103,99 +125,7 @@ admin.post('/changePassword', function (req, res) {
     });
 });
 
-//list Courses
-admin.get('/listCourses', function (req, res) {
-    adminService.listCourses(req.query, function (response) {
-        res.send(response);
-    });
-});
-
-//add Courses
-admin.post('/addCourse', function (req, res) {
-    adminService.addCourses( req.body, req.files, function (response) {
-        res.send(response);
-    });
-});
-
-//edit Courses
-admin.post('/editCourse', function (req, res) {
-    adminService.editCourses( req.body, req.files, function (response) {
-        res.send(response);
-    });
-});
-
-//list Courses-Category
-admin.get('/listCategory', function (req, res) {
-    adminService.listCategory(req.query, function (response) {
-        res.send(response);
-    });
-});
 
 
-//add Category
-admin.post('/addCategory', function (req, res) {
-    adminService.addCategory( req.body, function (response) {
-        res.send(response);
-    });
-});
-
-//edit Category
-admin.post('/editCategory', function (req, res) {
-    adminService.editCategory( req.body, function (response) {
-        res.send(response);
-    });
-});
-
-
-//list Courses-Sub-Category
-admin.get('/listSubCategory', function (req, res) {
-    adminService.listSubCategory(req.query, function (response) {
-        res.send(response);
-    });
-});
-
-
-//add SubCategory
-admin.post('/addSubCategory', function (req, res) {
-    adminService.addSubCategory( req.body, function (response) {
-        res.send(response);
-    });
-});
-
-//edit SubCategory
-admin.post('/editSubCategory', function (req, res) {
-    adminService.editSubCategory( req.body, function (response) {
-        res.send(response);
-    });
-});
-
-//list Course Detail
-admin.get('/listCourseDetail', function (req, res) {
-    adminService.listCourseDetail(req.query, function (response) {
-        res.send(response);
-    });
-});
-
-
-//add Detail Course
-admin.post('/addDetailCourse', function (req, res) {
-    adminService.addDetailCourse( req.body, req.files, function (response) {
-        res.send(response);
-    });
-});
-
-//edit DetailCourse
-admin.post('/editDetailCourse', function (req, res) {
-    adminService.editDetailCourse( req.body, req.files, function (response) {
-        res.send(response);
-    });
-});
-
-//Admin Notification List
-admin.get('/admin-notification-list', function (req, res) {
-    adminService.listAdminNotification(req.query, function (result) {
-        res.send(result);
-    })
-});
 
 module.exports = admin;

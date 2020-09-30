@@ -13,33 +13,47 @@ var apiService = {
 
         //register User
         register: (data, callback) => {
-            // Phone Number: (Op੎onal Filed) ● Password: (Mandatory Filed)
 
+            // Phone Number: (Op੎onal Filed) ● Password: (Mandatory Filed)
+            // Full Name: (Mandatory Filed)
+            // Gender: (Mandatory Filed)
+            // Date of Birth: (Mandatory Filed)
+            // Email ID: (Mandatory Filed)
+            // Phone Number: (Optional Filed)
+            // Password: (Mandatory Filed)
+console.log('valid data---->',data)
             if (!data.fullName || typeof data.fullName === undefined) {
                 callback({
                     success: false,
-                    STATUSCODE: 4004,
+                    STATUSCODE: 404,
                     message: "please provide fullName",
                     response: []
                 });
-            } else if (!data.userName || typeof data.userName === undefined) {
+            } else if (!data.gender || typeof data.gender === undefined) {
                 callback({
                     success: false,
-                    STATUSCODE: 4004,
-                    message: "please provide userName",
+                    STATUSCODE: 404,
+                    message: "please provide gender",
+                    response: []
+                });
+            } else if (!data.phoneNumber || typeof data.phoneNumber === undefined) {
+                callback({
+                    success: false,
+                    STATUSCODE: 404,
+                    message: "please provide phoneNumber",
                     response: []
                 });
             } else if (!data.email || typeof data.email === undefined) {
                 callback({
                     success: false,
-                    STATUSCODE: 4004,
+                    STATUSCODE: 404,
                     message: "please provide email",
                     response: []
                 });
             } else if (!data.password || typeof data.password === undefined) {
                 callback({
                     success: false,
-                    STATUSCODE: 4004,
+                    STATUSCODE: 404,
                     message: "please provide password",
                     response: []
                 });
@@ -53,34 +67,56 @@ var apiService = {
                 });
             }
         },
-
+        
+        //verifyEmailOtp 
+        verifyEmailOtp: (data, callback) => {
+            if (!data.email || typeof data.email === undefined) {
+                callback({
+                    success: false,
+                    STATUSCODE: 404,
+                    message: "please provide email address",
+                    response: []
+                });
+            } else if (!data.otp || typeof data.otp === undefined) {
+                callback({
+                    success: false,
+                    STATUSCODE: 404,
+                    message: "please provide otp",
+                    response: []
+                });
+            } else {
+                ApiModels.verifyEmailOtp(data, function (result) {
+                    callback(result);
+                });
+            }
+        },
         //login 
         login: (data, callback) => {
             if (!data.email || typeof data.email === undefined) {
                 callback({
                     success: false,
-                    STATUSCODE: 4004,
+                    STATUSCODE: 404,
                     message: "please provide email address",
                     response: []
                 });
             } else if (!data.password || typeof data.password === undefined) {
                 callback({
                     success: false,
-                    STATUSCODE: 4004,
+                    STATUSCODE: 404,
                     message: "please provide password",
                     response: []
                 });
             } else if (!data.deviceToken || typeof data.deviceToken === undefined) {
                 callback({
                     success: false,
-                    STATUSCODE: 4004,
+                    STATUSCODE: 404,
                     message: "please provide deviceToken",
                     response: []
                 });
             } else if (!data.appType || typeof data.appType === undefined) {
                 callback({
                     success: false,
-                    STATUSCODE: 4004,
+                    STATUSCODE: 404,
                     message: "please provide appType",
                     response: []
                 });
@@ -90,13 +126,32 @@ var apiService = {
                 });
             }
         },
+
+        // Social Login
+        socialRegister: (data, callback) => {
         
+            if (!data.socialLogin || typeof data.socialLogin === undefined) {
+                callback({
+                success: false,
+                STATUSCODE: 5002,
+                message: "socialLogin  Required ",
+                response: {}
+                });
+
+            } else {
+                data.email = data.email?String(data.email).toLowerCase():'';
+                ApiModels.socialRegister(data, function (result) {
+                callback(result);
+            });
+            }
+        },
+
         //Forgot password
         forgotPassword: (data, callback) => {
             if (!data.email || typeof data.email === undefined) {
                 callback({
                     success: false,
-                    STATUSCODE: 4004,
+                    STATUSCODE: 404,
                     message: "please provide email address",
                     response: []
                 });
@@ -113,14 +168,14 @@ var apiService = {
             if (!data.userId || typeof data.userId === undefined) {
                 callback({
                     success: false,
-                    STATUSCODE: 4004,
+                    STATUSCODE: 404,
                     message: "please provide user id",
                     response: []
                 });
             } else if (!data.newPassword || typeof data.newPassword === undefined) {
                 callback({
                     success: false,
-                    STATUSCODE: 4004,
+                    STATUSCODE: 404,
                     message: "please provide password",
                     response: []
                 });
@@ -138,13 +193,31 @@ var apiService = {
                 callback(result);
             });
         },
+
+        
+        //reportedUserList
+        reportedUserList: function (data, callback) {
+            console.log("data",data); 
+            ApiModels.reportedUserList(data, function (result) {
+                callback(result);
+            });
+        },
+
+
+        //testNotification
+        testNotification: function (data, callback) {
+            console.log("data",data); 
+            ApiModels.testNotification(data, function (result) {
+                callback(result);
+            });
+        },
         //Edit User
         editUser: async (data, fileData, callback) => {
 
                 if (!data.userId || typeof data.userId === undefined) {
                         callback({
                             success: false,
-                            STATUSCODE: 4004,
+                            STATUSCODE: 404,
                             message: "Please Provide User Id",
                             response: []
                         });
@@ -155,14 +228,45 @@ var apiService = {
                         });
                 }
         },
+        
+        //Edit ProfileImage
+        updateProfileImage: async (data, fileData, callback) => {
 
+                if (!data.userId || typeof data.userId === undefined) {
+                        callback({
+                            success: false,
+                            STATUSCODE: 404,
+                            message: "Please Provide User Id",
+                            response: []
+                        });
+                }else if (!data.profileImageId || typeof data.profileImageId === undefined) {
+                    callback({
+                        success: false,
+                        STATUSCODE: 404,
+                        message: "Please Provide Profile Image Id",
+                        response: []
+                    });
+                }else if (!data.action || typeof data.action === undefined) {
+                    callback({
+                        success: false,
+                        STATUSCODE: 404,
+                        message: "Please Provide action",
+                        response: []
+                    });
+                } else {
+
+                        ApiModels.updateProfileImage(data, fileData, function (result) {
+                        callback(result)
+                        });
+                }
+        },
         //Delete User
         deleteUser: async (data, callback) => {
 
             if (!data.userId || typeof data.userId === undefined) {
                     callback({
                         success: false,
-                        STATUSCODE: 4004,
+                        STATUSCODE: 404,
                         message: "Please Provide User Id",
                         response: {}
                     });
@@ -172,71 +276,6 @@ var apiService = {
                     });
             }
         },
-
-        //list Courses
-        listCourses: async (data,  callback) => {
-
-              ApiModels.listCourses(data,  function (result) {
-                    callback(result)
-                    });
-        },
-
-        //detail Courses
-        detailCourses: async (data,  callback) => {
-
-            ApiModels.detailCourses(data,  function (result) {
-                  callback(result)
-                  });
-        },
-
-        //Delete Courses
-        deleteCourses: async (data, callback) => {
-
-            if (!data.courseId || typeof data.courseId === undefined) {
-                    callback({
-                        success: false,
-                        STATUSCODE: 4004,
-                        message: "Please Provide Courses Id",
-                        response: {}
-                    });
-            } else {
-                    ApiModels.deleteCourses(data, function (result) {
-                    callback(result)
-                    });
-            }
-        },
-        
-        //Delete Courses
-        deleteDetailCourse: async (data, callback) => {
-
-            if (!data.detailCourseId || typeof data.detailCourseId === undefined) {
-                    callback({
-                        success: false,
-                        STATUSCODE: 4004,
-                        message: "Please Provide Detail Course Id",
-                        response: {}
-                    });
-            } else {
-                    ApiModels.deleteDetailCourse(data, function (result) {
-                    callback(result)
-                    });
-            }
-        },
-
-        //list Courses-Category
-        listCategory: async (data,  callback) => {
-
-            ApiModels.listCategory(data,  function (result) {
-                  callback(result)
-                  });
-          },
-        //list Courses-Sub-Category
-        listSubCategory: async (data,  callback) => {
-
-            ApiModels.listSubCategory(data,  function (result) {
-                  callback(result)
-                  });
-         },
          
         //listTerms
         listTerms: function (data, callback) {
@@ -251,7 +290,7 @@ var apiService = {
             if (!data.termId || typeof data.termId === undefined) {
                 callback({
                     success: false,
-                    STATUSCODE: 4004,
+                    STATUSCODE: 404,
                     message: "Please Provide Term Id",
                     response: {}
                 });
@@ -262,12 +301,28 @@ var apiService = {
             }
            
         },
-
         
         //listPrivacyPolicy
         listPrivacyPolicy: function (data, callback) {
             console.log("data",data); 
             ApiModels.listPrivacyPolicy(data, function (result) {
+                callback(result);
+            });
+        },
+
+        //listCountry
+        listCountry: function (data, callback) {
+            console.log("data",data); 
+            ApiModels.listCountry(data, function (result) {
+                callback(result);
+            });
+        },
+
+
+        //listEthnicity
+        listEthnicity: function (data, callback) {
+            console.log("data",data); 
+            ApiModels.listEthnicity(data, function (result) {
                 callback(result);
             });
         },
@@ -278,7 +333,7 @@ var apiService = {
             if (!data.privacyId || typeof data.privacyId === undefined) {
                 callback({
                     success: false,
-                    STATUSCODE: 4004,
+                    STATUSCODE: 404,
                     message: "Please Provide Privacy Id",
                     response: {}
                 });
@@ -289,110 +344,44 @@ var apiService = {
             }
 
         },
-
-        //add To Cart
-        addToCart: async (data,  callback) => {
-            if (!data.userId || typeof data.userId === undefined) {
-                callback({
-                    success: false,
-                    STATUSCODE: 4004,
-                    message: "Please Provide User Id",
-                    response: {}
-                });
-            }else if (!data.courseDetailId || typeof data.courseDetailId === undefined) {
-                    callback({
-                        success: false,
-                        STATUSCODE: 4004,
-                        message: "Please Provide Course Detail Id",
-                        response: {}
-                    });
-                
-            } else {
-                ApiModels.addToCart(data, function (result) {
-                callback(result)
-                });
-            }
-           
-        },
         
-        //buy Course Detail
-        buyCourseDetail: async (data,  callback) => {
-            if (!data.userId || typeof data.userId === undefined) {
-                callback({
-                    success: false,
-                    STATUSCODE: 4004,
-                    message: "Please Provide User Id",
-                    response: {}
-                });
-            }else if (!data.courseDetailId || typeof data.courseDetailId === undefined) {
-                    callback({
-                        success: false,
-                        STATUSCODE: 4004,
-                        message: "Please Provide Course Detail Id",
-                        response: {}
-                    });
-                
-            } else {
-                ApiModels.buyCourseDetail(data, function (result) {
-                callback(result)
-                });
-            }
-           
-        },
-
-        addReviewService: function (data, callback) {
-
-            if (!data.userId || typeof data.userId === undefined) {
-
-                    callback({
-                        success: false,
-                        STATUSCODE: 4004,
-                        message: "Please Provide User Id",
-                        response: {}
-                    });
-
-            }else if (!data.courseDetailId || typeof data.courseDetailId === undefined) {
-
-                    callback({
-                        success: false,
-                        STATUSCODE: 4004,
-                        message: "Please Provide Course Detail Id",
-                        response: {}
-                    });
-                
-            }else if (!data.title || typeof data.title === undefined) {
-
-                    callback({
-                        success: false,
-                        STATUSCODE: 4004,
-                        message: "Please Provide Title",
-                        response: {}
-                    });
-        
-            }else if (!data.rating || typeof data.rating === undefined) {
-
-                    callback({
-                        success: false,
-                        STATUSCODE: 4004,
-                        message: "Please Provide Rating",
-                        response: {}
-                    });
+        //addFeedback
+        addFeedback: (data,  callback) => {
             
+            if (!data.fromUser || typeof data.fromUser === undefined) {
+                callback({
+                    success: false,
+                    STATUSCODE: 404,
+                    message: "Please Provide fromUser Id",
+                    response: {}
+                });
+            }else  if (!data.toUser || typeof data.toUser === undefined) {
+                callback({
+                    success: false,
+                    STATUSCODE: 404,
+                    message: "Please Provide toUser ",
+                    response: {}
+                });
+            }else  if (!data.title || typeof data.title === undefined) {
+                callback({
+                    success: false,
+                    STATUSCODE: 404,
+                    message: "Please Provide title ",
+                    response: {}
+                });
+            }else  if (!data.message || typeof data.message === undefined) {
+                callback({
+                    success: false,
+                    STATUSCODE: 404,
+                    message: "Please Provide message ",
+                    response: {}
+                });
             } else {
-                    data._id = new ObjectID;
-
-                    ApiModels.addReviewModel(data, function (res) {
-                        callback(res);
-                    })
+                data._id = new ObjectID;
+                ApiModels.addFeedback(data, function (result) {
+                callback(result)
+                });
             }
-           
-        },
-    
-        listReviewService: function (data, callback) {
-                    ApiModels.listReviewModel(data, function (res) {
-                        callback(res);
-                    })
-        }      
-
-};
+        },                
+    };
 module.exports = apiService;

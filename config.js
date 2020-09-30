@@ -1,10 +1,10 @@
 module.exports = {
-    "port": 3190,
+    "port": 3193,
     "secretKey": "hyrgqwjdfbw4534efqrwer2q38945765",
     "link_expire": 172800,
     dbAccess: 'server',
     local: {
-        database: "mongodb://localhost:27017/globaledulink",
+        database: "mongodb://localhost:27017/calaf",
         MAIL_USERNAME: "liveapp.brainium@gmail.com",
         MAIL_PASS: "YW5kcm9pZDIwMTY"
     },
@@ -12,19 +12,19 @@ module.exports = {
         'server': {
             username: 'brain1uMMong0User',
             password: 'PL5qnU9nuvX0pBa',
-            host: 'nodeserver.brainiuminfotech.com',
+            host: 'nodeserver.mydevfactory.com',
             port: '27017',
-            dbName: 'globaledulink',
+            dbName: 'calaf',
             authDb: 'admin'
         },
         'local': {
             port: 27017,
             host: "localhost",
-            dbName: "globaledulink"
+            dbName: "calaf"
         }
     },
     email: {
-        database: "mongodb://localhost:27017/globaledulink",
+        database: "mongodb://localhost:27017/calaf",
         MAIL_USERNAME: "liveapp.brainium@gmail.com",
         MAIL_PASS: "YW5kcm9pZDIwMTY"
     },
@@ -53,19 +53,12 @@ module.exports = {
     UserProfilePath: "uploads/user/profilePic/",
     UploadUserProfilePath:'public/uploads/user/profilePic/',
     userDemoPicPath: "uploads/dummy/demo-profile.png",
-    UploadCourseProfilePath:'public/uploads/course/',
-    CourseProfilePath: "uploads/course/",
     
-    uploadCurriculumDocPath:"public/uploads/courseDetail/curriculum/",
-    CourseCurriculumDocPath: "uploads/courseDetail/curriculum/",
 
-    uploadCourseImagePath:"public/uploads/courseDetail/",
-    CourseCourseImagePath: "uploads/courseDetail/",
-
-    // socketUrl: "https://nodeserver.brainiuminfotech.com:1426/",
-    liveUrl: "http://localhost:3190/",
-    //liveUrl: "https://nodeserver.brainiuminfotech.com:3190/",
-    baseUrl: "https://nodeserver.brainiuminfotech.com/RAJEEV/globaledulink/admin/#/",
+    // socketUrl: "https://nodeserver.mydevfactory.com:1426/",
+    //liveUrl: "http://localhost:3193/",
+    liveUrl: "https://nodeserver.mydevfactory.com:3193/",
+    baseUrl: "https://nodeserver.mydevfactory.com/RAJEEV/calaf/admin/#/",
     logPath: "/ServiceLogs/admin.debug.log",
     dev_mode: true,
     __root_dir: __dirname,
